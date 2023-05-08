@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: my-app
+  name: second-app
   namespace: argocd
   
   ## finalizers are used to delete the application from k8s cluster first when the application is deleted from argocd
