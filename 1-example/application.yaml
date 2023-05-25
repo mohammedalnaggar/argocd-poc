@@ -1,0 +1,31 @@
+#!! the below is a sample application that will be deployed by argocd targetting one app to deployed
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+  namespace: argocd
+  
+  ## finalizers are used to delete the application from k8s cluster first when the application is deleted from argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/mohammedalnaggar/argocd-poc.git
+    targetRevision: HEAD
+    path: environments/staging/myapp
+  destination:
+    server: https://kubernetes.default.svc
+
+  ## syncPolicy controls when and how application will be automatically synced & without this section, the application will not be synced automatically   
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - Validate=true
+      - CreateNamespace=false
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
